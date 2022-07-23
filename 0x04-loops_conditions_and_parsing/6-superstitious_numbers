@@ -1,19 +1,22 @@
 #!/usr/bin/env bash
-# A script that displays the time for 12 hours and 59 minutes:
-# display hours from 0-12
-# display minutes from 1 to 59
-HOUR=0; MIN=1
-
-while ((HOUR <= 12))
+# This script is displaying "Holberton School" 10 times
+# 4th it will display "bad luck from China" in place of
+# 9th it will display "bad luck from Japan" in place of
+# 17th it will display "bad luck from Italy" in place of
+counter=1
+while [ $counter -le 20 ]
 do
-	echo "Hour: $HOUR"
-
-	while ((MIN <= 59))
-	do
-		echo $MIN
-		MIN=$((MIN+1))
-	done
-
-	MIN=1
-	HOUR=$((HOUR+1))
+    echo "$counter"
+    case $counter in
+        4)
+            echo "bad luck from China"
+        ;;
+        9)
+            echo "bad luck from Japan"
+        ;;
+        17)
+            echo "bad luck from Italy"
+        ;;
+    esac
+    (( counter++ ))
 done
