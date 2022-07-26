@@ -1,25 +1,28 @@
 #!/usr/bin/env bash
 # A init script that manages "manage_my_process"
 
-PIDFILE=/var/run/my_process.pid
-
-if [ "$1" == "start" ]
-then
-	./manage_my_process &
-	echo $$ > $PIDFILE
+case $1 in
+    "start")
+        ./manage_my_process &
+	sudo sh -c 'echo $$ > /var/run/my_process.pid'
 	echo "manage_my_process started"
-elif [ "$1" == "stop" ]
-then
-	kill "$(pgrep -f /manage_my_process)"
-	rm $PIDFILE
+    ;;
+    "stop")
+        pkill -SIGTERM -f "./manage_my_process"
+	sudo rm /var/run/my_process.pid
 	echo "manage_my_process stopped"
-elif [ "$1" == "restart" ]
-then
-	kill "$(pgrep -f /manage_my_process)"
-	rm $PIDFILE
-	./manage_my_process &
-	echo $$ > $PIDFILE
+    ;;
+    "restart")
+        pkill -SIGTERM -f "./manage_my_process"
+	if [ -e /var/run/my_process.pid ];
+	then
+	    sudo rm /var/run/my_process.pid
+	fi
+        ./manage_my_process &
+	sudo sh -c 'echo $$ > /var/run/my_process.pid'
 	echo "manage_my_process restarted"
-else
+    ;;
+    *)
 	echo "Usage: manage_my_process {start|stop|restart}"
-fi
+    ;;
+esac
